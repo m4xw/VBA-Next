@@ -1,0 +1,45 @@
+image: devkitpro/devkita64:latest
+
+cache:
+  paths:
+  - vba-next/
+
+stages:
+  - build
+  - package
+
+build:
+  stage: build
+  before_script:
+    - dkp-pacman -S --noconfirm devkitARM
+    - export DEVKITPRO=/opt/devkitpro
+    - export DEVKITARM=/opt/devkitpro/devkitARM
+  script:
+    - rm -rf vba-next
+    - mkdir vba-next
+    - make platform=switch -j15
+    - git clone https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
+    - cp vba_next_libretro_switch.a RetroArch/libretro_switch.a 
+    - cd RetroArch/
+    - mkdir romfs
+    - rm icon.jpg
+    - cp ../deploy/icon.jpg icon.jpg
+    - APP_TITLE="VBA-Next libnx" make -f Makefile.switch -j15
+    - cp retroarch_switch.nro ../vba-next/vba-next.nro
+    - cp ../deploy/retroarch.cfg ../vba-next/retroarch.cfg
+    - cp ../deploy/NintendoVBA.cfg ../vba-next/NintendoVBA.cfg
+    - cp ../deploy/NintendoVBA4.png ../vba-next/NintendoVBA4.png
+
+package:
+  stage: package
+  script:
+    - echo 'creating zip'
+  when: on_success
+  artifacts:
+    name: vba-next
+    paths:
+    - vba-next/
+  only:
+  - master
+
+
