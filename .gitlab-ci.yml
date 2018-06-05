@@ -22,7 +22,7 @@ build:
     - cp vba_next_libretro_switch.a RetroArch/libretro_switch.a 
     - cd RetroArch/
     - mkdir romfs
-    - rm icon.jpg |:
+    - rm icon.jpg
     - cp ../deploy/icon.jpg icon.jpg
     - APP_TITLE="VBA-Next libnx" make -f Makefile.switch -j15
     - cp retroarch_switch.nro ../vba-next/vba-next.nro
