@@ -1,8 +1,15 @@
-image: devkitpro/devkita64:latest
+image: starcarr/libnx:latest
+
+variables:
+  PACKAGE_FOLDER: "vba-next"
+  LIBRARY_NAME: "vba_next_libretro_switch.a"
+  NRO_NAME: "vba-next.nro"
+  APP_TITLE: "VBA-Next libnx"
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
-  - vba-next/
+  - $PACKAGE_FOLDER
 
 stages:
   - build
@@ -10,30 +17,20 @@ stages:
 
 build:
   stage: build
-  before_script:
-    - apt-get update
-    - apt-get install -y unzip
-    - dkp-pacman -S --noconfirm devkitARM
-    - export DEVKITPRO=/opt/devkitpro
-    - export DEVKITARM=/opt/devkitpro/devkitARM
-    - rm -rf /opt/devkitpro/libnx
-    - wget "https://git.m4xw.net/Switch/RetroArch/libnx/-/jobs/artifacts/master/download?job=package"
-    - mv download\?job\=package libnx.zip
-    - unzip libnx.zip -d /opt/devkitpro/
   script:
-    - rm -rf vba-next
-    - mkdir vba-next
-    - cp assets/overlay.cfg vba-next/overlay.cfg
-    - cp assets/overlay.png vba-next/overlay.png
+    - rm -rf $PACKAGE_FOLDER
+    - mkdir $PACKAGE_FOLDER
+    - cp assets/overlay.cfg $PACKAGE_FOLDER/overlay.cfg
+    - cp assets/overlay.png $PACKAGE_FOLDER/overlay.png
     - make platform=switch -j20
-    - git clone -b feature/VBAAudioFix https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
-    - cp vba_next_libretro_switch.a RetroArch/libretro_switch.a 
+    - git clone -b master https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
+    - cp $LIBRARY_NAME RetroArch/libretro_switch.a 
     - cp assets/icon.jpg RetroArch/icon.jpg
-    - cd RetroArch/
+    - cd RetroArch/ 
     - mkdir romfs
-    - APP_TITLE="VBA-Next libnx" make -f Makefile.switch -j15
-    - cp retroarch_switch.nro ../vba-next/vba-next.nro
-    - cp retroarch.cfg ../vba-next/retroarch.cfg
+    - APP_TITLE="$APP_TITLE" make -f Makefile.switch -j20
+    - cp retroarch_switch.nro ../$PACKAGE_FOLDER/$NRO_NAME
+    - cp retroarch.cfg ../$PACKAGE_FOLDER/retroarch.cfg
 
 package:
   stage: package
@@ -41,9 +38,9 @@ package:
     - echo 'creating zip'
   when: on_success
   artifacts:
-    name: vba-next
+    name: $PACKAGE_FOLDER
     paths:
-    - vba-next/
+    - $PACKAGE_FOLDER
   only:
   - master
 
