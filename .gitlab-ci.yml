@@ -23,7 +23,7 @@ build:
     - cp assets/overlay.cfg $PACKAGE_FOLDER/overlay.cfg
     - cp assets/overlay.png $PACKAGE_FOLDER/overlay.png
     - make platform=switch -j20
-    - git clone -b feature/VBAAudioFix https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
+    - git clone -b feature/threading https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
     - cp $LIBRARY_NAME RetroArch/libretro_switch.a 
     - cp assets/icon.jpg RetroArch/icon.jpg
     - cd RetroArch/ 
