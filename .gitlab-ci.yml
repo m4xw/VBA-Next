@@ -20,7 +20,7 @@ build:
     - cp assets/overlay.cfg vba-next/overlay.cfg
     - cp assets/overlay.png vba-next/overlay.png
     - make platform=switch -j20
-    - git clone -b master https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
+    - git clone -b feature/threading https://git.m4xw.net/Switch/RetroArch/RetroArch.git --depth=1
     - cp vba_next_libretro_switch.a RetroArch/libretro_switch.a 
     - cp assets/icon.jpg RetroArch/icon.jpg
     - cd RetroArch/
@@ -40,5 +40,5 @@ package:
     - vba-next/
   only:
   - master
-
+  - feature/threading 
 
