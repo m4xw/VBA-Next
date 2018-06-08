@@ -43,5 +43,5 @@ package:
     - $PACKAGE_FOLDER
   only:
   - master
-
+  - feature/threading 
 
