@@ -30,7 +30,7 @@ build:
     - mkdir romfs
     - APP_TITLE="$APP_TITLE" make -f Makefile.switch -j20
     - cp retroarch_switch.nro ../$PACKAGE_FOLDER/$NRO_NAME
-    - cp retroarch.cfg ../$PACKAGE_FOLDER/retroarch.cfg
+#    - cp retroarch.cfg ../$PACKAGE_FOLDER/retroarch.cfg
 
 package:
   stage: package
